@@ -60,7 +60,7 @@ class ConcreteJob(base.JobBase):
             period = 60
             delta_seconds = 120
         else:
-            delta_seconds = period
+            delta_seconds = period * 2
         end_time = datetime.datetime.utcnow()
         start_time = end_time - datetime.timedelta(
             seconds=delta_seconds
