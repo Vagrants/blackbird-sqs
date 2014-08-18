@@ -134,8 +134,7 @@ class Validator(base.ValidatorBase):
             "aws_region_name = string(default=us-east-1)",
             "queue_name = string()",
             "hostname = string()",
-            "ignore_metrics = list(default=list())",
-            "interval = 300"
+            "ignore_metrics = list(default=list())"
         )
         return self.__spec
 
@@ -178,4 +177,4 @@ if __name__ == '__main__':
     JOB = ConcreteJob(
         options=OPTIONS
     )
-    print json.dumps(JOB._fetch_statistics())
+    print(json.dumps(JOB._fetch_statistics()))
