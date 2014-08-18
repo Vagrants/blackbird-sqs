@@ -11,7 +11,7 @@ What metrics this script get?
 
 | Metric Name                           | Statistics Type |
 |---------------------------------------|-----------------|
-| NumberOfMessageSent                   | Sum             |
+| NumberOfMessagesSent                  | Sum             |
 | SentMessageSize                       | Minumum         |
 | SentMessageSize                       | Maximum         |
 | SentMessageSize                       | Average         |

@@ -16,7 +16,7 @@ class ConcreteJob(base.JobBase):
     def __init__(self, options, queue=None, logger=None):
         super(ConcreteJob, self).__init__(options, queue, logger)
         self.metrics_config = [
-            {'NumberOfMessageSent': 'Sum'},
+            {'NumberOfMessagesSent': 'Sum'},
             {'SentMessageSize': 'Minimum'},
             {'SentMessageSize': 'Maximum'},
             {'SentMessageSize': 'Average'},
