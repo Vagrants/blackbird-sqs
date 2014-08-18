@@ -51,7 +51,7 @@ class ConcreteJob(base.JobBase):
         )
         return conn
 
-    def _fetch_statistics(self):
+    def _fetch_metrics(self):
         conn = self._create_connection()
         result = dict()
 
@@ -96,12 +96,23 @@ class ConcreteJob(base.JobBase):
         conn.close()
         return result
 
+    def _build_ping_item(self):
+        item = SQSItem(
+            key_prefix='blackbird',
+            key='ping',
+            value=1,
+            host=self.options.get('hostname')
+        )
+        self._enqueue(item)
+
     def build_items(self):
         """
         Main loop.
         """
-        raw_items = self._fetch_statistics()
+        raw_items = self._fetch_metrics()
         hostname = self.options.get('hostname')
+
+        self._build_ping_item()
 
         for key, raw_value in raw_items.iteritems():
             if raw_value is None:
@@ -144,9 +155,10 @@ class SQSItem(base.ItemBase):
     Enqueued item.
     """
 
-    def __init__(self, key, value, host):
+    def __init__(self, key, value, host, key_prefix=None):
         super(SQSItem, self).__init__(key, value, host)
 
+        self.key_prefix = key_prefix
         self.__data = dict()
         self._generate()
 
@@ -158,7 +170,15 @@ class SQSItem(base.ItemBase):
         return self.__data
 
     def _generate(self):
-        self.__data['key'] = 'cloudwatch.sqs.{0}'.format(self.key)
+        if self.key_prefix is not None:
+            self.__data['key'] = (
+                '{0}.cloudwatch.sqs.{1}'
+            ).format(
+                self.key_prefix,
+                self.key
+            )
+        else:
+            self.__data['key'] = 'cloudwatch.sqs.{0}'.format(self.key)
         self.__data['value'] = self.value
         self.__data['host'] = self.host
         self.__data['clock'] = self.clock
@@ -177,4 +197,4 @@ if __name__ == '__main__':
     JOB = ConcreteJob(
         options=OPTIONS
     )
-    print(json.dumps(JOB._fetch_statistics()))
+    print(json.dumps(JOB._fetch_metrics()))
