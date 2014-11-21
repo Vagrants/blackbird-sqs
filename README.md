@@ -48,3 +48,5 @@ e.g: your `sqs.cfg` file
 [SQS.QUEUE_NAME]
 ignore_metrics = SentMessageSize, NumberOfMessagesReceived, NumberOfEmptyReceives
 ```
+
+I'll create RPM packages soon.
